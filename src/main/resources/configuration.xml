@@ -6,4 +6,9 @@
     <bean id="main" class="Main"/>
     <bean id="myEventPublisher" class="event.MyEventPublisher"/>
     <bean id="myEventListener" class="event.MyEventListener"/>
+
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="text"/>
+        <property name="defaultEncoding" value="windows-1251"/>
+    </bean>
 </beans>

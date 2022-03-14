@@ -4,35 +4,36 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Main implements ApplicationContextAware {
 
     public static void main(String[] args) {
-        System.out.println("Hello");
+        Locale locale = Locale.US; // or Locale.getDefault()
 
         Scanner input = new Scanner(System.in);
         Random rand = new Random();
-        int findMe = rand.nextInt(10 + 1);
+        int findMe = rand.nextInt(1000 + 1);
         System.out.println(findMe);
 
         ApplicationContext context = new ClassPathXmlApplicationContext("configuration.xml");
         MyEventPublisher publisher = context.getBean("myEventPublisher", MyEventPublisher.class);
 
-        publisher.publishEvent("Привет, я загадал число, попробуй его отгадать!");
-        publisher.publishEvent("Делай попытку, можно вводить числа от 0 до 1000!");
+        publisher.publishEvent(context.getMessage("greetings",null, locale));
+        publisher.publishEvent(context.getMessage("task",null, locale));
 
         while (true) {
             int num = input.nextInt();
             if (findMe > num) {
-                publisher.publishEvent("Моё число больше твоего");
+                publisher.publishEvent(context.getMessage("greaterNumber",null, locale));
             }
             else if (findMe < num) {
-                publisher.publishEvent("Моё число больше твоего");
+                publisher.publishEvent(context.getMessage("lessNumber",null, locale));
             }
             else {
-                publisher.publishEvent("Ты угадал, я загадал число " + findMe);
+                publisher.publishEvent(context.getMessage("guessedNumber",null, locale) + " " + findMe);
                 break;
             }
         }
